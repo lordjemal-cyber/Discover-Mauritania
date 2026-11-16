@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { copy, localeCodes, type Locale } from '@/content/locales'
 import { getSavedTour, TOUR_STORAGE_KEY, type TourOverride, type TourText } from '@/components/tour-card'
@@ -37,6 +37,10 @@ function editorValues(id: string, locale: Locale, source?: TourOverride): TourOv
 }
 
 const localeNames: Record<Locale, string> = { en: 'English', ar: 'العربية', fr: 'Français', es: 'Español', zh: '中文', ja: '日本語', de: 'Deutsch' }
+
+function lines(value?: string) {
+  return (value || '').split('\n').map((line) => line.trim()).filter(Boolean)
+}
 
 export function AdminDashboard() {
   const [access, setAccess] = useState<'checking' | 'local-demo' | 'setup' | 'signed-out' | 'denied' | 'ready'>('checking')
@@ -107,6 +111,7 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
   const [values, setValues] = useState<TourOverride>({ currency: 'USD' })
   const [notice, setNotice] = useState('')
   const [saving, setSaving] = useState(false)
+  const [uploadingMedia, setUploadingMedia] = useState(false)
   const [pricedCount, setPricedCount] = useState(0)
   const selected = tours.find((item) => item.id === active)!
 
@@ -131,6 +136,60 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
     return () => { alive = false }
   }, [access])
   function update(key: keyof TourOverride, value: string) { setValues((current) => ({ ...current, [key]: value })) }
+  async function uploadImages(event: ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.currentTarget.files || [])
+    event.currentTarget.value = ''
+    if (!files.length) return
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+    const invalidFile = files.find((file) => !allowedTypes.includes(file.type) || file.size > 50 * 1024 * 1024)
+    if (invalidFile) {
+      setNotice('اختر صور JPG أو PNG أو WebP، على ألا يتجاوز حجم الصورة 50 ميغابايت.')
+      return
+    }
+    const supabase = createClient()
+    if (!supabase) {
+      setNotice('اربط Supabase أولاً قبل رفع الصور.')
+      return
+    }
+    setUploadingMedia(true)
+    setNotice('')
+    const uploaded: string[] = []
+    let failedName = ''
+    let failure = ''
+    try {
+      for (const file of files) {
+        const safeName = file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]/g, '-').replace(/-+/g, '-')
+        const path = `${selected.id}/${crypto.randomUUID()}-${safeName || 'image'}`
+        const { error } = await supabase.storage.from('tour-media').upload(path, file, {
+          cacheControl: '3600',
+          contentType: file.type,
+          upsert: false,
+        })
+        if (error) {
+          failedName = file.name
+          failure = error.message
+          break
+        }
+        uploaded.push(supabase.storage.from('tour-media').getPublicUrl(path).data.publicUrl)
+      }
+    } catch (error) {
+      failedName = 'الملف المحدد'
+      failure = error instanceof Error ? error.message : 'خطأ غير معروف'
+    }
+    if (uploaded.length) {
+      setValues((current) => {
+        const images = [current.image, ...lines(current.gallery)].filter(Boolean)
+        const combined = [...images, ...uploaded]
+        return { ...current, image: combined[0] || '', gallery: combined.slice(1).join('\n') }
+      })
+    }
+    if (failedName) {
+      setNotice(`رُفع ${uploaded.length} من الصور. تعذّر رفع ${failedName}: ${failure}`)
+    } else {
+      setNotice(`رُفعت ${uploaded.length} صورة إلى تخزين Supabase. احفظ التغييرات لنشرها في صفحة الرحلة.`)
+    }
+    setUploadingMedia(false)
+  }
   async function save() {
     setSaving(true)
     setNotice('')
@@ -174,7 +233,7 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
     <section className="admin-content">
       <header className="admin-topbar"><div><span>إدارة الموقع</span><b>/</b><strong>محتوى الرحلات</strong></div><div className="admin-top-actions"><Link href="/ar/tours" className="admin-preview-link">عرض صفحة الرحلات ↗</Link>{access === 'ready' && <button className="admin-preview-link" onClick={onSignOut}>تسجيل الخروج</button>}</div></header>
       <div className="admin-page-title" id="overview"><div><p className="eyebrow-dark">مركز التحكم · الرحلات</p><h1>كل تفاصيل رحلاتك، مرتبة وواضحة.</h1><p>اختر الرحلة واللغة، ثم عدّل المعلومات التي تظهر للزوار.</p></div><span className="prototype-pill">{access === 'ready' ? 'متصل بقاعدة البيانات' : 'معاينة محلية فقط'}</span></div>
-      <div className="admin-notice"><b>ⓘ</b><span>{access === 'ready' ? 'تحقق الدخول عبر Supabase، وتُحفظ تفاصيل الرحلات في قاعدة البيانات. استخدم روابط وسائط تملك حق نشرها. رفع الملفات المباشر غير موصول بعد.' : 'هذا وضع معاينة للتطوير فقط؛ تُحفظ التغييرات في هذا المتصفح. لا يظهر هذا الوضع عند النشر، ويتطلب التحرير المنشور ربط Supabase وتسجيل مدير مخوّل.'}</span></div>
+      <div className="admin-notice"><b>ⓘ</b><span>{access === 'ready' ? 'تحقق الدخول عبر Supabase، وتُحفظ تفاصيل الرحلات في قاعدة البيانات. يمكنك رفع صورك إلى مساحة tour-media أو استخدام روابط وسائط تملك حق نشرها.' : 'هذا وضع معاينة للتطوير فقط؛ تُحفظ التغييرات في هذا المتصفح. لا يظهر هذا الوضع عند النشر، ويتطلب التحرير المنشور ربط Supabase وتسجيل مدير مخوّل.'}</span></div>
       <div className="admin-stats"><article><span>رحلات قابلة للتحرير</span><strong>{String(tours.length).padStart(2, '0')}</strong><small>البرامج المعرفة حالياً بالموقع</small></article><article><span>رحلات لها سعر محفوظ</span><strong>{pricedCount.toString().padStart(2, '0')}</strong><small>{access === 'ready' ? 'قراءة السعر من قاعدة البيانات' : 'تظهر بعد الحفظ في هذه المعاينة'}</small></article><article><span>طلبات المسافرين</span><strong>—</strong><small>لا تصل إلى اللوحة قبل تفعيل نموذج حقيقي</small></article></div>
 
       <section className="admin-editor" id="trip-editor">
@@ -209,11 +268,12 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
       <section className="admin-editor admin-editor-secondary" id="media">
         <div className="admin-section-title"><span>د</span><div><p className="eyebrow-dark">03 · الصور والفيديو</p><h2>معرض صور الرحلة</h2><p>أضف روابط وسائط تملك حق استخدامها. يدعم المعرض عدة صور.</p></div></div>
         <div className="admin-form-grid">
+          <label className="wide-field">رفع صور من جهازك<input dir="ltr" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={uploadingMedia} onChange={uploadImages}/><small>تُرفع إلى مساحة tour-media في Supabase. JPG أو PNG أو WebP، حتى 50 ميغابايت للصورة.</small></label>
           <label className="wide-field">الصورة الرئيسية<input dir="ltr" placeholder="https://…" value={values.image || ''} onChange={(event) => update('image', event.target.value)}/></label>
-          <label className="wide-field">روابط صور إضافية<textarea dir="ltr" rows={4} placeholder="https://… (رابط لكل صورة في سطر)" value={values.gallery || ''} onChange={(event) => update('gallery', event.target.value)}/><small>صورة واحدة في كل سطر. رفع الملفات مباشرة يحتاج تخزين وسائط آمن.</small></label>
+          <label className="wide-field">روابط صور إضافية<textarea dir="ltr" rows={4} placeholder="https://… (رابط لكل صورة في سطر)" value={values.gallery || ''} onChange={(event) => update('gallery', event.target.value)}/><small>صورة واحدة في كل سطر. يمكنك أيضاً رفع الصور من جهازك باستخدام الحقل أعلاه.</small></label>
           <label className="wide-field">رابط فيديو الرحلة<input dir="ltr" placeholder="YouTube / Vimeo URL" value={values.video || ''} onChange={(event) => update('video', event.target.value)}/></label>
         </div>
-        <div className="admin-save-row"><p role="status">{notice || (access === 'ready' ? 'احفظ التغييرات لنشرها عبر قاعدة بيانات الموقع.' : 'احفظ المعاينة لمشاهدة التعديلات على صفحات الرحلات في هذا المتصفح.')}</p><button className="button button-ink" onClick={save} disabled={saving}>{saving ? 'جارٍ الحفظ…' : 'حفظ التعديلات'} <span>✓</span></button></div>
+        <div className="admin-save-row"><p role="status">{notice || (access === 'ready' ? 'احفظ التغييرات لنشرها عبر قاعدة بيانات الموقع.' : 'احفظ المعاينة لمشاهدة التعديلات على صفحات الرحلات في هذا المتصفح.')}</p><button className="button button-ink" onClick={save} disabled={saving || uploadingMedia}>{uploadingMedia ? 'جارٍ رفع الصور…' : saving ? 'جارٍ الحفظ…' : 'حفظ التعديلات'} <span>✓</span></button></div>
       </section>
 
       <section className="admin-bookings" id="bookings"><div><p className="eyebrow-dark">04 · التواصل والحجوزات</p><h2>واتساب وطلبات المسافرين</h2></div><p>زر واتساب يفتح محادثة مباشرة مع الرقم +222 47 31 53 21. نموذج الحجز لا يرسل رسائل ولا يسجل طلبات حتى ربط خدمة حقيقية واختبارها.</p></section>

@@ -2,13 +2,15 @@
 
 ## What is prepared in this repository
 
-- The initial PostgreSQL schema is in `supabase/migrations/202611160001_initial_schema.sql`.
+- The initial PostgreSQL schema is in `supabase/migrations/202611160001_initial_schema.sql` and has been applied to the Supabase project `Discover Mauritania` (`koukbzaifvsqbwfdjqpb`).
 - It models published trips, localized text in Arabic, English, French, Spanish, Simplified Chinese, Japanese and German, a primary departure and its price/capacity, media links, allow-listed administrators, and future enquiries.
-- Row Level Security is enabled. Public visitors can read published trip information; only an authenticated account listed in `admin_users` can change trip content. The browser receives only Supabase's publishable key. Never use a secret/service-role key in the app.
-- `/admin` is a local-only editor while running without Supabase in development. When deployed without configuration, edits are locked. With Supabase configured, password sign-in and the admin allow-list are required; edits use the `admin_save_tour` database function.
-- Media fields currently accept HTTPS image/video links. The schema creates a private-admin upload policy and bucket, but the app does **not** yet upload files. Contact forms do **not** submit enquiries or send email.
+- The live project now has six public tables, all with Row Level Security enabled: `tours`, `tour_translations`, `departures`, `tour_media`, `admin_users`, and `inquiries`. They currently contain no rows.
+- Public visitors can read published trip information; only an authenticated account listed in `admin_users` can change trip content. The admin allow-list is currently empty. The first owner account must be created in Supabase Auth, then its UUID added to `admin_users` before anyone can edit.
+- This workspace has a local `.env.local` containing only the project URL and publishable key; `.env.local` is ignored by Git. Never use a secret/service-role key in browser code or commit environment files.
+- `/admin` now verifies the Supabase user and the `is_site_admin` database function on the server before rendering the editor. Unauthenticated visitors see only the sign-in screen; authenticated users outside the allow-list receive a not-found response. Database policies also reject writes from non-admins.
+- The `tour-media` public bucket is configured for JPG, PNG and WebP images plus MP4/WebM video, with uploads restricted to allow-listed admins. The admin editor uploads images directly to Supabase Storage. The contact enquiry table is ready, but the contact form remains disabled until a privacy notice and end-to-end delivery flow are approved.
 
-The database has not been created or migrated in a cloud account. Applying SQL, login, saves, RLS, and public reads have not been tested against a live project.
+The schema, tables, RLS, and media bucket have been confirmed in the live project. The owner account is not created yet, so admin sign-in and media uploads still need an end-to-end check after allow-listing.
 
 ## Create and connect a Supabase project
 
@@ -28,16 +30,16 @@ The database has not been created or migrated in a cloud account. Applying SQL, 
 
 ## Hosting choice
 
-Use GitHub as the private/source repository and CI; do not use GitHub Pages as the business website host. This is an interactive Next.js application with an authenticated admin surface and is a commercial tourism business. [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) says it is not allowed as free hosting for an online business/e-commerce site; [Vercel Hobby](https://vercel.com/docs/plans/hobby) is limited to personal, non-commercial use. [Netlify supports this Next.js app](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/) and says its Free tier can host commercial projects, but it has 300 monthly credits and [pauses sites at the limit](https://docs.netlify.com/manage/accounts-and-billing/billing/resume-paused-projects/). That makes it a no-purchase MVP option, not a reliability guarantee for a business income source.
+Use GitHub as source control and CI; this repository is public, so do not commit secrets or environment files. Do not use GitHub Pages as the business website host. This is an interactive Next.js application with an authenticated admin surface and is a commercial tourism business. [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) says it is not allowed as free hosting for an online business/e-commerce site; [Vercel Hobby](https://vercel.com/docs/plans/hobby) is limited to personal, non-commercial use. [Netlify supports this Next.js app](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/) and says its Free tier can host commercial projects, but it has 300 monthly credits and [pauses sites at the limit](https://docs.netlify.com/manage/accounts-and-billing/billing/resume-paused-projects/). That makes it a no-purchase MVP option, not a reliability guarantee for a business income source.
 
-The repository contains `netlify.toml` for Node 24.13.0 and a GitHub Actions workflow that checks dependencies, TypeScript, and the production build. To go live, push this repository to a GitHub account you control, import it in Netlify, enter the two Supabase public environment variables, and deploy. No hosting account, repository, Supabase account, domain, or production deployment has been connected from this workspace.
+The repository contains `netlify.toml` for Node 24.13.0 and a GitHub Actions workflow that checks dependencies, TypeScript, and the production build. To go live, import this repository in Netlify, enter the two Supabase public environment variables, and deploy. The repository and Supabase project are connected locally; no production hosting environment or domain has been configured from this workspace.
 
 Before launch, add a custom domain and test the deployed site, admin sign-in, database policies, multilingual pages, image rights/loading, WhatsApp handoff, mobile layouts, and contact/booking process. If the free-tier pause/credit limits are unacceptable, choose a paid plan only after reviewing actual expected traffic and budget; no plan has been purchased or activated here.
 
 ## Release checklist
 
-- [ ] Apply migration to a non-production Supabase project and confirm SQL completes.
-- [ ] Create one owner login; confirm unlisted users cannot edit.
+- [x] Apply the initial migration and verify the six tables, RLS, and `tour-media` bucket in Supabase.
+- [ ] Create one owner login, add its UUID to `admin_users`, and confirm unlisted users cannot edit.
 - [ ] Verify public reads and admin writes with RLS enabled.
 - [ ] Verify admin edits persist across browsers and redeploys.
 - [ ] Confirm every published trip's title, route, itinerary, language, price, availability, and media rights.
