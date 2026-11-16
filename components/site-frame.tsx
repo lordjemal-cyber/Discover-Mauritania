@@ -5,6 +5,7 @@ import { MobileMenu } from '@/components/mobile-menu'
 import { PrimaryNav } from '@/components/primary-nav'
 import { LocaleSwitch } from '@/components/locale-switch'
 import { WhatsAppButton } from '@/components/whatsapp-button'
+import { ArrowIcon } from '@/components/arrow-icon'
 
 export function SiteFrame({ locale, children }: { locale: Locale; children: React.ReactNode }) {
   const t = copy[locale]
@@ -12,13 +13,14 @@ export function SiteFrame({ locale, children }: { locale: Locale; children: Reac
     <header className="masthead">
       <Link className="wordmark" href={`/${locale}`} aria-label={t.brand}><span className="wordmark-symbol">م</span><span>{t.brand}<small>DISCOVER THE UNEXPECTED</small></span></Link>
       <MobileMenu locale={locale}/><PrimaryNav locale={locale}/>
-      <div className="masthead-tools"><LocaleSwitch locale={locale}/><Link className="button button-reserve" href={`/${locale}/contact`}>{t.inquire}<span aria-hidden="true">↗</span></Link></div>
+      <div className="masthead-tools"><LocaleSwitch locale={locale}/><Link className="button button-reserve" href={`/${locale}/contact`}>{t.inquire}<ArrowIcon/></Link></div>
     </header>
     {children}
     <WhatsAppButton locale={locale}/>
     <footer className="footer">
-      <div className="footer-top"><Link className="wordmark footer-logo" href={`/${locale}`}><span className="wordmark-symbol">م</span><span>{t.brand}<small>DISCOVER THE UNEXPECTED</small></span></Link><p>{t.footerLine}</p><Link className="footer-cta" href={`/${locale}/contact`}>{t.inquire} <span>↗</span></Link></div>
-      <div className="footer-bottom"><span>© {new Date().getFullYear()} {t.brand}</span><div><Link href={`/${locale}/about`}>{t.nav[3]}</Link><Link href={`/${locale}/faq`}>{t.nav[4]}</Link><Link href="/admin">{t.adminLink}</Link></div><details className="photo-credits"><summary>{t.photoCredit}</summary><ul>{Object.entries(photoAssets).map(([id, photo]) => <li key={id}><a href={photo.page} target="_blank" rel="noreferrer">{photo.credit} · {photo.license}</a></li>)}</ul></details></div>
+      <div className="footer-top"><Link className="wordmark footer-logo" href={`/${locale}`}><span className="wordmark-symbol">م</span><span>{t.brand}<small>DISCOVER THE UNEXPECTED</small></span></Link><p>{t.footerLine}</p><Link className="footer-cta" href={`/${locale}/contact`}>{t.inquire} <ArrowIcon/></Link></div>
+      <div className="footer-bottom"><span>© {new Date().getFullYear()} {t.brand}</span><div><Link href={`/${locale}/about`}>{t.nav[3]}</Link><Link href={`/${locale}/faq`}>{t.nav[4]}</Link></div><details className="photo-credits"><summary>{t.photoCredit}</summary><ul>{Object.entries(photoAssets).map(([id, photo]) => <li key={id}><a href={photo.page} target="_blank" rel="noreferrer">{photo.credit} · {photo.license}</a></li>)}</ul></details></div>
     </footer>
   </main>
 }
+
