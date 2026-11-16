@@ -15,6 +15,7 @@ const labelByField: Record<keyof TourText, string> = {
   title: 'اسم الرحلة', subtitle: 'وصف مختصر', route: 'المسار', itinerary: 'برنامج الأيام', included: 'ما يشمله السعر', destinations: 'الوجهات والمحطات', faq: 'أسئلة شائعة عن الرحلة',
 }
 const sharedFields: (keyof TourOverride)[] = ['price', 'currency', 'duration', 'departure', 'available', 'total', 'groupSize', 'image', 'gallery', 'video']
+type InquiryItem = { id: string; full_name: string; email: string; phone: string; travel_date: string | null; travelers: number; message: string; status: 'new' | 'contacted' | 'confirmed' | 'closed'; created_at: string }
 
 function editorValues(id: string, locale: Locale, source?: TourOverride): TourOverride {
   const trip = copy[locale].programs.find((item) => item.id === id)!
@@ -113,6 +114,8 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
   const [saving, setSaving] = useState(false)
   const [uploadingMedia, setUploadingMedia] = useState(false)
   const [pricedCount, setPricedCount] = useState(0)
+  const [inquiries, setInquiries] = useState<InquiryItem[]>([])
+  const [inquiriesLoading, setInquiriesLoading] = useState(false)
   const selected = tours.find((item) => item.id === active)!
 
   useEffect(() => {
@@ -135,6 +138,31 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
     }).catch(() => { if (alive) setPricedCount(0) })
     return () => { alive = false }
   }, [access])
+  useEffect(() => {
+    if (access !== 'ready') return
+    const supabase = createClient()
+    if (!supabase) return
+    let alive = true
+    setInquiriesLoading(true)
+    void (async () => {
+      try {
+        const { data, error } = await supabase.from('inquiries').select('id,full_name,email,phone,travel_date,travelers,message,status,created_at').order('created_at', { ascending: false }).limit(100)
+        if (alive) setInquiries(error ? [] : (data as InquiryItem[] || []))
+      } catch {
+        if (alive) setInquiries([])
+      } finally {
+        if (alive) setInquiriesLoading(false)
+      }
+    })()
+    return () => { alive = false }
+  }, [access])
+
+  async function updateInquiryStatus(id: string, status: InquiryItem['status']) {
+    const supabase = createClient()
+    if (!supabase) return
+    const { error } = await supabase.from('inquiries').update({ status }).eq('id', id)
+    if (!error) setInquiries((current) => current.map((item) => item.id === id ? { ...item, status } : item))
+  }
   function update(key: keyof TourOverride, value: string) { setValues((current) => ({ ...current, [key]: value })) }
   async function uploadImages(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.currentTarget.files || [])
@@ -234,7 +262,7 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
       <header className="admin-topbar"><div><span>إدارة الموقع</span><b>/</b><strong>محتوى الرحلات</strong></div><div className="admin-top-actions"><Link href="/ar/tours" className="admin-preview-link">عرض صفحة الرحلات ↗</Link>{access === 'ready' && <button className="admin-preview-link" onClick={onSignOut}>تسجيل الخروج</button>}</div></header>
       <div className="admin-page-title" id="overview"><div><p className="eyebrow-dark">مركز التحكم · الرحلات</p><h1>كل تفاصيل رحلاتك، مرتبة وواضحة.</h1><p>اختر الرحلة واللغة، ثم عدّل المعلومات التي تظهر للزوار.</p></div><span className="prototype-pill">{access === 'ready' ? 'متصل بقاعدة البيانات' : 'معاينة محلية فقط'}</span></div>
       <div className="admin-notice"><b>ⓘ</b><span>{access === 'ready' ? 'تحقق الدخول عبر Supabase، وتُحفظ تفاصيل الرحلات في قاعدة البيانات. يمكنك رفع صورك إلى مساحة tour-media أو استخدام روابط وسائط تملك حق نشرها.' : 'هذا وضع معاينة للتطوير فقط؛ تُحفظ التغييرات في هذا المتصفح. لا يظهر هذا الوضع عند النشر، ويتطلب التحرير المنشور ربط Supabase وتسجيل مدير مخوّل.'}</span></div>
-      <div className="admin-stats"><article><span>رحلات قابلة للتحرير</span><strong>{String(tours.length).padStart(2, '0')}</strong><small>البرامج المعرفة حالياً بالموقع</small></article><article><span>رحلات لها سعر محفوظ</span><strong>{pricedCount.toString().padStart(2, '0')}</strong><small>{access === 'ready' ? 'قراءة السعر من قاعدة البيانات' : 'تظهر بعد الحفظ في هذه المعاينة'}</small></article><article><span>طلبات المسافرين</span><strong>—</strong><small>لا تصل إلى اللوحة قبل تفعيل نموذج حقيقي</small></article></div>
+      <div className="admin-stats"><article><span>رحلات قابلة للتحرير</span><strong>{String(tours.length).padStart(2, '0')}</strong><small>البرامج المعرفة حالياً بالموقع</small></article><article><span>رحلات لها سعر محفوظ</span><strong>{pricedCount.toString().padStart(2, '0')}</strong><small>{access === 'ready' ? 'قراءة السعر من قاعدة البيانات' : 'تظهر بعد الحفظ في هذه المعاينة'}</small></article><article><span>طلبات المسافرين</span><strong>{inquiriesLoading ? '…' : inquiries.length.toString().padStart(2, '0')}</strong><small>{access === 'ready' ? 'طلبات محفوظة في قاعدة البيانات' : 'المعاينة المحلية لا تتلقى طلبات'}</small></article></div>
 
       <section className="admin-editor" id="trip-editor">
         <div className="admin-editor-heading"><div><p className="eyebrow-dark">01 · بيانات أساسية</p><h2>اختر رحلة ولغة التحرير</h2></div><div className="admin-selectors"><label>الرحلة<select aria-label="اختر الرحلة" value={active} onChange={(event) => setActive(event.target.value)}>{tours.map((tour) => <option value={tour.id} key={tour.id}>{tour.title}</option>)}</select></label><label>لغة المحتوى<select aria-label="لغة المحتوى" value={activeLocale} onChange={(event) => setActiveLocale(event.target.value as Locale)}>{localeCodes.map((locale) => <option value={locale} key={locale}>{localeNames[locale]}</option>)}</select></label></div></div>
@@ -276,7 +304,7 @@ function AdminEditor({ access, onSignOut }: { access: 'ready' | 'local-demo'; on
         <div className="admin-save-row"><p role="status">{notice || (access === 'ready' ? 'احفظ التغييرات لنشرها عبر قاعدة بيانات الموقع.' : 'احفظ المعاينة لمشاهدة التعديلات على صفحات الرحلات في هذا المتصفح.')}</p><button className="button button-ink" onClick={save} disabled={saving || uploadingMedia}>{uploadingMedia ? 'جارٍ رفع الصور…' : saving ? 'جارٍ الحفظ…' : 'حفظ التعديلات'} <span>✓</span></button></div>
       </section>
 
-      <section className="admin-bookings" id="bookings"><div><p className="eyebrow-dark">04 · التواصل والحجوزات</p><h2>واتساب وطلبات المسافرين</h2></div><p>زر واتساب يفتح محادثة مباشرة مع الرقم +222 47 31 53 21. نموذج الحجز لا يرسل رسائل ولا يسجل طلبات حتى ربط خدمة حقيقية واختبارها.</p></section>
+      <section className="admin-bookings" id="bookings"><div><p className="eyebrow-dark">04 · التواصل والحجوزات</p><h2>طلبات المسافرين</h2></div>{inquiriesLoading ? <p>جارٍ تحميل الطلبات…</p> : inquiries.length === 0 ? <p>لا توجد طلبات حتى الآن. ستظهر الاستفسارات الجديدة هنا بعد إرسالها من الموقع.</p> : <div className="admin-inquiry-list">{inquiries.map((item) => <article className="admin-inquiry" key={item.id}><header><strong>{item.full_name}</strong><select aria-label={`حالة طلب ${item.full_name}`} value={item.status} onChange={(event) => void updateInquiryStatus(item.id, event.target.value as InquiryItem['status'])}><option value="new">جديد</option><option value="contacted">تم التواصل</option><option value="confirmed">مؤكد</option><option value="closed">مغلق</option></select></header><p><a href={`mailto:${encodeURIComponent(item.email)}`}>{item.email}</a> · <a href={`tel:${encodeURIComponent(item.phone)}`}>{item.phone}</a></p><p>المسافرون: {item.travelers}{item.travel_date ? ` · موعد السفر: ${item.travel_date}` : ''}</p><blockquote>{item.message}</blockquote><small>{new Date(item.created_at).toLocaleString('ar')}</small></article>)}</div>}</section>
       <footer className="admin-footer">{access === 'ready' ? 'تُحفظ البيانات في Supabase · الأسعار والمواعيد مسؤولية مدير الرحلة' : 'التغييرات محلية في هذا المتصفح · الأسعار والمواعيد مسؤولية مدير الرحلة'} <span>DISCOVER MAURITANIA</span></footer>
     </section>
   </main>

@@ -8,9 +8,9 @@
 - Public visitors can read published trip information; only an authenticated account listed in `admin_users` can change trip content. The admin allow-list is currently empty. The first owner account must be created in Supabase Auth, then its UUID added to `admin_users` before anyone can edit.
 - This workspace has a local `.env.local` containing only the project URL and publishable key; `.env.local` is ignored by Git. Never use a secret/service-role key in browser code or commit environment files.
 - `/admin` now verifies the Supabase user and the `is_site_admin` database function on the server before rendering the editor. Unauthenticated visitors see only the sign-in screen; authenticated users outside the allow-list receive a not-found response. Database policies also reject writes from non-admins.
-- The `tour-media` public bucket is configured for JPG, PNG and WebP images plus MP4/WebM video, with uploads restricted to allow-listed admins. The admin editor uploads images directly to Supabase Storage. The contact enquiry table is ready, but the contact form remains disabled until a privacy notice and end-to-end delivery flow are approved.
+- The `tour-media` public bucket is configured for JPG, PNG and WebP images plus MP4/WebM video, with uploads restricted to allow-listed admins. The admin editor uploads images directly to Supabase Storage. The contact form now stores enquiries in `inquiries` after the visitor agrees to the contact-data notice; allow-listed admins can review requests and update their status in `/admin`.
 
-The schema, tables, RLS, and media bucket have been confirmed in the live project. The owner account is not created yet, so admin sign-in and media uploads still need an end-to-end check after allow-listing.
+The schema, tables, RLS, and media bucket have been confirmed in the live project. No Supabase Auth users exist yet, so admin sign-in, inquiry management, and media uploads still need an end-to-end check after creating and allow-listing the owner account.
 
 ## Create and connect a Supabase project
 
