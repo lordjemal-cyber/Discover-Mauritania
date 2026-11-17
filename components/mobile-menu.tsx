@@ -16,3 +16,4 @@ export function MobileMenu({ locale }: { locale: Locale }) {
     return <Link key={urls[index]} onClick={() => setOpen(false)} href={urls[index]} aria-current={active ? 'page' : undefined}>{label}<ArrowIcon/></Link>
   })}<Link onClick={() => setOpen(false)} className="mobile-menu-cta" href={`/${locale}/contact`} aria-current={pathname === `/${locale}/contact` ? 'page' : undefined}>{t.inquire}<ArrowIcon/></Link></nav>}</div>
 }
+

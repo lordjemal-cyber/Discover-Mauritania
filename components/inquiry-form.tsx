@@ -67,3 +67,4 @@ export function InquiryForm({ locale, labels, defaultMessage = '' }: { locale: L
     {status !== 'idle' && <p className={`form-result ${status}`} role="status" aria-live="polite">{status === 'success' ? text.success : status === 'config' ? text.configuration : text.error}</p>}
   </form>
 }
+

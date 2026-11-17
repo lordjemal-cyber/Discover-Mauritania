@@ -20,3 +20,4 @@ export default async function TourDetailPage({ params }: { params: Promise<{ loc
   const photo = photoAssets[trip.image as keyof typeof photoAssets]
   return <SiteFrame locale={language}><TourDetailHero locale={language} trip={trip} photo={photo}/><TourGallery locale={language} trip={trip} photo={photo}/><section className="tour-detail-layout"><div className="tour-detail-copy"><p className="eyebrow-dark">{t.tourLabel}</p><h2>{trip.subtitle}</h2><TourStoryDetails locale={language} trip={trip}/></div><TourDetailPanel locale={language} trip={trip}/></section><section className="inner-bottom"><span>YOUR JOURNEY, YOUR WAY</span><Link className="button button-ink" href={`/${language}/contact`}>{t.askDetails}<ArrowIcon/></Link></section></SiteFrame>
 }
+

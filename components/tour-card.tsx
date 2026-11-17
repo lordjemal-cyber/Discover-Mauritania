@@ -30,3 +30,4 @@ export function TourCard({ locale, tour }: { locale: Locale; tour: (typeof copy)
     <div className="tour-card-body"><div className="tour-card-meta"><span>{tour.category}</span><span className="tour-duration">◷ {override.duration || t.durationInquiry}</span></div><h3><Link href={href}>{title}</Link></h3><p className="tour-subtitle">{content.subtitle || tour.subtitle}</p><div className="tour-route"><span className="route-dot"/>{content.route || tour.route}</div><div className="tour-card-foot"><div className="tour-price"><small>{t.priceLabel}</small><strong>{override.price ? `${override.price} ${override.currency || 'USD'}` : t.priceInquiry}</strong>{override.departure && <small>{override.departure}</small>}</div><Link className="button button-ink" href={href}>{t.askDetails}<ArrowIcon/></Link></div></div>
   </article>
 }
+
