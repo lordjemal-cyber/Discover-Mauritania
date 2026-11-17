@@ -21,7 +21,7 @@ export default async function AttractionDetailPage({ params }: { params: Promise
   const photo = photoAssets[place.image]
   const related = attractions.filter((item) => item.slug !== place.slug && (item.region === place.region || item.theme === place.theme)).slice(0, 4)
   return <SiteFrame locale={language}>
-    <section className="attraction-detail-hero">
+    <section className="attraction-detail-hero" data-theme={place.theme}>
       <img src={photo.src} alt={name} fetchPriority="high" />
       <div className="attraction-detail-shade" />
       <Link className="attraction-back" href={`/${language}/destinations`}>← {ui.back}</Link>
