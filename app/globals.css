@@ -69,7 +69,6 @@
 .journey-process{padding-inline:clamp(24px,8vw,130px)}
 .closing-cta{padding-inline:clamp(24px,10vw,160px)}
 .inner-hero{position:relative;overflow:hidden;padding:100px clamp(25px,10vw,160px) 86px;background:radial-gradient(ellipse at 90% 0%,#d9d0bb88 0,transparent 42%),linear-gradient(115deg,#f0ede4,#f8f6f0 68%)}
-.inner-hero:after{content:'✳';position:absolute;inset-inline-end:8%;top:15px;color:#ae956930;font-size:210px;line-height:1;pointer-events:none}
 .inner-hero>*{position:relative;z-index:1}
 .inner-hero .eyebrow-dark{font:700 9px var(--sans);letter-spacing:.2em;color:#94794c}
 .inner-hero h1{color:#173b31;font-size:clamp(48px,6.6vw,78px);max-width:850px}
@@ -98,7 +97,6 @@
   .hero-photo-caption a{font-size:6px}
   .journeys-section,.destinations-band,.journey-process{padding-inline:22px}
   .inner-hero{padding:66px 24px 54px}
-  .inner-hero:after{font-size:125px;inset-inline-end:3%;top:5px}
   .inner-hero h1{font-size:clamp(42px,11vw,58px)}
   .inner-hero>p:last-child{font-size:10px}
   .inquiry-form{padding:21px 17px}
