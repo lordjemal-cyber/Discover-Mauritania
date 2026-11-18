@@ -309,4 +309,11 @@ body{background:var(--paper);color:var(--ink)}
   .footer-destinations li a{border-bottom:1px solid #ffffff12}
 }
 @media(max-width:380px){.attraction-card{padding:12px;min-height:132px}.attraction-card i{width:24px;height:24px;bottom:9px;inset-inline-end:8px}}
+@media(max-width:760px){
+  .contact-hero{width:100%;padding-inline:clamp(18px,5vw,24px)}
+  .contact-layout{width:100%;max-width:720px;margin-inline:auto;padding:clamp(36px,9vw,48px) clamp(16px,5vw,22px) 52px;grid-template-columns:minmax(0,1fr);gap:24px}
+  .contact-layout>div{width:100%;max-width:none}
+  .contact-layout h2{font-size:clamp(31px,8vw,36px)}
+  .inquiry-form{width:100%;max-width:720px;margin-inline:auto;padding:clamp(18px,5vw,22px)}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

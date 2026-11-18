@@ -5,7 +5,7 @@ import './responsive-refresh.css'
 export const metadata: Metadata = {
   title: 'Trip in Mauritania — Between the Atlantic and the Sahara',
   description: 'A thoughtful travel guide to Mauritania.',
-  icons: { icon: '/trip-in-mauritania-logo.jpg' },
+  icons: { icon: '/trip-in-mauritania-logo.webp' },
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
