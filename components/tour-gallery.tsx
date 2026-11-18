@@ -4,7 +4,7 @@ import type { Locale } from '@/content/locales'
 import { detailLabels } from '@/content/detail-labels'
 import { useTourOverride } from '@/components/use-tour-override'
 
-export function TourGallery({ locale, trip, photo }: { locale: Locale; trip: { id: string; title: string }; photo: { src: string; credit: string; license: string; page: string } }) {
+export function TourGallery({ locale, trip, photo }: { locale: Locale; trip: { id: string; title: string }; photo: { src: string; srcSet?: string; credit: string; license: string; page: string } }) {
   const saved = useTourOverride(trip.id, locale)
   const labels = detailLabels[locale]
 

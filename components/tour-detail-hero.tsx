@@ -6,7 +6,7 @@ import { detailLabels } from '@/content/detail-labels'
 import { getLocalizedTour } from '@/components/tour-card'
 import { useTourOverride } from '@/components/use-tour-override'
 
-export function TourDetailHero({ locale, trip, photo }: { locale: Locale; trip: { id: string; title: string; category: string; subtitle: string }; photo: { src: string; credit: string; license: string; page: string } }) {
+export function TourDetailHero({ locale, trip, photo }: { locale: Locale; trip: { id: string; title: string; category: string; subtitle: string }; photo: { src: string; srcSet?: string; credit: string; license: string; page: string } }) {
   const override = useTourOverride(trip.id, locale)
   const labels = detailLabels[locale]
   const content = getLocalizedTour(override, locale)
