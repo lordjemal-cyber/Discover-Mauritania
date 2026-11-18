@@ -18,7 +18,7 @@ export function HomeExperience({ locale }: { locale: Locale }) {
         <div className="hero-meta"><span>MAURITANIA</span><i/><span>SAHARA · ATLANTIC</span></div>
       </div>
       <div className="hero-visual">
-          <img className="hero-photo" src={photoAssets.adrar.src} alt={t.heroPhotoAlt} fetchPriority="high"/>
+          <img className="hero-photo" src={photoAssets.adrar.src} srcSet={photoAssets.adrar.srcSet} sizes="(max-width: 760px) 100vw, 50vw" alt={t.heroPhotoAlt} fetchPriority="high" decoding="async"/>
         <div className="hero-visual-wash"/>
         <div className="hero-photo-caption"><span>01 / {t.destinations[0]}</span><a href={photoAssets.adrar.page} target="_blank" rel="noreferrer">Radosław Botev · CC BY 3.0 PL</a></div>
         <div className="hero-location-card"><span>{t.homeLocationEyebrow}</span><strong>{t.homeLocationTitle}</strong><small>{t.homeLocationNote}</small></div>

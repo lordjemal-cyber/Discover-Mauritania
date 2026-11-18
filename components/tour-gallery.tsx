@@ -12,6 +12,6 @@ export function TourGallery({ locale, trip, photo }: { locale: Locale; trip: { i
   const title = labels.gallery
   return <section className="tour-gallery" aria-label={title}>
     <div className="tour-gallery-heading"><div><p className="eyebrow-dark">MAURITANIA · {trip.title}</p><h2>{title}</h2></div><span>{String(images.length).padStart(2, '0')} {labels.imageUnit}</span></div>
-    <div className="tour-gallery-grid">{images.map((src, index) => <figure className={index === 0 ? 'gallery-main' : ''} key={`${src}-${index}`}><img src={src} alt={`${trip.title} · ${index + 1}`} loading={index === 0 ? 'eager' : 'lazy'}/>{index === 0 && !saved.image && <figcaption><a href={photo.page} target="_blank" rel="noreferrer">{photo.credit} · {photo.license}</a></figcaption>}</figure>)}</div>
+    <div className="tour-gallery-grid">{images.map((src, index) => <figure className={index === 0 ? 'gallery-main' : ''} key={`${src}-${index}`}><img src={src} srcSet={index === 0 && !saved.image ? photo.srcSet : undefined} sizes="(max-width: 760px) 100vw, 70vw" alt={`${trip.title} · ${index + 1}`} loading={index === 0 ? 'eager' : 'lazy'} decoding="async"/>{index === 0 && !saved.image && <figcaption><a href={photo.page} target="_blank" rel="noreferrer">{photo.credit} · {photo.license}</a></figcaption>}</figure>)}</div>
   </section>
 }

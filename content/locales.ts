@@ -261,7 +261,19 @@ export const copy = {
 } satisfies Record<Locale, SiteCopy>
 
 export const photoAssets = {
-  adrar: { src: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Sahara_desert_Adrar_Province_Mauritania.jpg', credit: 'Radosław Botev / Fundacja Nomos', license: 'CC BY 3.0 PL', page: 'https://commons.wikimedia.org/wiki/File:Sahara_desert_Adrar_Province_Mauritania.jpg' },
-  train: { src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Mauritanie-Transport_du_minerai_de_fer.jpg', credit: 'stringer_bel', license: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Mauritanie-Transport_du_minerai_de_fer.jpg' },
-  coast: { src: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg/1280px-ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg', credit: 'NASA Johnson Space Center', license: 'Public domain (US)', page: 'https://commons.wikimedia.org/wiki/File:ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_(cropped).jpg' },
+  adrar: {
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Sahara_desert_Adrar_Province_Mauritania.jpg/1280px-Sahara_desert_Adrar_Province_Mauritania.jpg',
+    srcSet: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Sahara_desert_Adrar_Province_Mauritania.jpg/640px-Sahara_desert_Adrar_Province_Mauritania.jpg 640w, https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Sahara_desert_Adrar_Province_Mauritania.jpg/1280px-Sahara_desert_Adrar_Province_Mauritania.jpg 1280w',
+    credit: 'Radosław Botev / Fundacja Nomos', license: 'CC BY 3.0 PL', page: 'https://commons.wikimedia.org/wiki/File:Sahara_desert_Adrar_Province_Mauritania.jpg',
+  },
+  train: {
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Mauritanie-Transport_du_minerai_de_fer.jpg/1280px-Mauritanie-Transport_du_minerai_de_fer.jpg',
+    srcSet: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Mauritanie-Transport_du_minerai_de_fer.jpg/640px-Mauritanie-Transport_du_minerai_de_fer.jpg 640w, https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Mauritanie-Transport_du_minerai_de_fer.jpg/1280px-Mauritanie-Transport_du_minerai_de_fer.jpg 1280w',
+    credit: 'stringer_bel', license: 'CC BY 2.0', page: 'https://commons.wikimedia.org/wiki/File:Mauritanie-Transport_du_minerai_de_fer.jpg',
+  },
+  coast: {
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg/1280px-ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg',
+    srcSet: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg/640px-ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg 640w, https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg/1280px-ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_%28cropped%29.jpg 1280w',
+    credit: 'NASA Johnson Space Center', license: 'Public domain (US)', page: 'https://commons.wikimedia.org/wiki/File:ISS062-E-82362_-_View_of_Mauritania_-_Tidra_Island_-_Banc_d%27Arguin_(cropped).jpg',
+  },
 } as const

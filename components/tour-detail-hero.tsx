@@ -10,5 +10,5 @@ export function TourDetailHero({ locale, trip, photo }: { locale: Locale; trip: 
   const override = useTourOverride(trip.id, locale)
   const labels = detailLabels[locale]
   const content = getLocalizedTour(override, locale)
-  return <section className="tour-detail-hero"><img src={override.image || photo.src} alt={trip.category}/><div/><Link href={`/${locale}/tours`} className="detail-back">← {labels.allTrips}</Link><div className="detail-title"><p>{trip.category} · MAURITANIA</p><h1>{content.title || trip.title}</h1><span>{content.subtitle || trip.subtitle}</span></div>{!override.image && <a className="detail-photo-credit" href={photo.page} target="_blank" rel="noreferrer">{photo.credit} · {photo.license}</a>}</section>
+  return <section className="tour-detail-hero"><img src={override.image || photo.src} srcSet={!override.image ? photo.srcSet : undefined} sizes="100vw" alt={trip.category} decoding="async"/><div/><Link href={`/${locale}/tours`} className="detail-back">← {labels.allTrips}</Link><div className="detail-title"><p>{trip.category} · MAURITANIA</p><h1>{content.title || trip.title}</h1><span>{content.subtitle || trip.subtitle}</span></div>{!override.image && <a className="detail-photo-credit" href={photo.page} target="_blank" rel="noreferrer">{photo.credit} · {photo.license}</a>}</section>
 }
