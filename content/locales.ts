@@ -3,7 +3,7 @@ export type Locale = (typeof localeCodes)[number]
 
 const baseCopy = {
   ar: {
-    dir: 'rtl' as const, brand: 'اكتشف موريتانيا', nav: ['الرئيسية', 'الرحلات', 'الوجهات', 'عن موريتانيا', 'الأسئلة'],
+    dir: 'rtl' as const, brand: 'Trip in Mauritania', nav: ['الرئيسية', 'الرحلات', 'الوجهات', 'عن موريتانيا', 'الأسئلة'],
     inquire: 'خطّط رحلتك', menu: 'القائمة', heroEyebrow: 'بلدٌ يتّسع للمغامرة',
     heroTitle: 'الصحراء تنادي.\nوالحكاية لك.', heroLead: 'من دروب القوافل القديمة إلى سكة القطار التي تعبر المحيط من رمال الحديد؛ اكتشف موريتانيا على إيقاعك.',
     discover: 'استكشف الرحلات', custom: 'صمّم رحلة خاصة', proofTitle: 'رحلتك، على مقاسك', proofText: 'برنامج واضح، تفاصيل تناقشها معنا، وقرار الحجز يبقى لك.',
@@ -38,7 +38,7 @@ const baseCopy = {
     pagesEyebrows: { tours: 'موريتانيا · الرحلات', places: 'موريتانيا · الوجهات', about: 'عن الرحلة', aboutTrust: 'رحلة واضحة التفاصيل', faq: 'قبل السفر', contact: 'لنخطط لرحلتك', contactBody: 'موريتانيا · على طريقتك' }, adminLink: 'إدارة المحتوى',
   },
   en: {
-    dir: 'ltr' as const, brand: 'Discover Mauritania', nav: ['Home', 'Journeys', 'Places', 'About', 'FAQ'],
+    dir: 'ltr' as const, brand: 'Trip in Mauritania', nav: ['Home', 'Journeys', 'Places', 'About', 'FAQ'],
     inquire: 'Plan your trip', menu: 'Menu', heroEyebrow: 'A country made for discovery',
     heroTitle: 'The desert calls.\nThe story is yours.', heroLead: 'From ancient caravan routes to the iron train crossing toward the Atlantic, discover Mauritania at your own pace.',
     discover: 'Explore journeys', custom: 'Plan a private trip', proofTitle: 'Your journey, your way', proofText: 'A clear itinerary, details discussed with you, and the booking decision stays yours.',
@@ -73,7 +73,7 @@ const baseCopy = {
     pagesEyebrows: { tours: 'Mauritania · Journeys', places: 'Mauritania · Places', about: 'About the journey', aboutTrust: 'Travel with clarity', faq: 'Before you go', contact: 'Let’s plan a journey', contactBody: 'Mauritania · Your way' }, adminLink: 'Admin',
   },
   es: {
-    dir: 'ltr' as const, brand: 'Descubre Mauritania', nav: ['Inicio', 'Viajes', 'Lugares', 'Sobre nosotros', 'FAQ'],
+    dir: 'ltr' as const, brand: 'Trip in Mauritania', nav: ['Inicio', 'Viajes', 'Lugares', 'Sobre nosotros', 'FAQ'],
     inquire: 'Planifica tu viaje', menu: 'Menú', heroEyebrow: 'Un país para descubrir',
     heroTitle: 'El desierto llama.\nLa historia es tuya.', heroLead: 'De las antiguas rutas de caravanas al tren minero que cruza hacia el Atlántico: descubre Mauritania a tu ritmo.',
     discover: 'Explorar viajes', custom: 'Planear un viaje privado', proofTitle: 'Tu viaje, a tu manera', proofText: 'Un itinerario claro, detalles conversados contigo y la decisión de reservar siempre es tuya.',
@@ -115,7 +115,7 @@ export const copy = {
   ...baseCopy,
   fr: {
     ...baseCopy.en,
-    dir: 'ltr' as const, brand: 'Découvrir la Mauritanie', nav: ['Accueil', 'Voyages', 'Destinations', 'À propos', 'FAQ'],
+    dir: 'ltr' as const, brand: 'Trip in Mauritania', nav: ['Accueil', 'Voyages', 'Destinations', 'À propos', 'FAQ'],
     inquire: 'Préparer votre voyage', menu: 'Menu', heroEyebrow: 'Un pays à explorer',
     heroTitle: 'Le désert vous appelle.\nÀ vous d’écrire la suite.', heroLead: 'Des anciennes routes caravanières au train minéralier qui traverse le désert jusqu’à l’Atlantique, découvrez la Mauritanie à votre rythme.',
     discover: 'Explorer les voyages', custom: 'Créer un voyage privé', proofTitle: 'Votre voyage, à votre façon', proofText: 'Un itinéraire clair, des détails convenus avec vous et la décision de réserver vous appartient.',
@@ -152,7 +152,7 @@ export const copy = {
   es: baseCopy.es,
   zh: {
     ...baseCopy.en,
-    dir: 'ltr' as const, brand: '探索毛里塔尼亚', nav: ['首页', '旅程', '目的地', '关于我们', '常见问题'],
+    dir: 'ltr' as const, brand: 'Trip in Mauritania', nav: ['首页', '旅程', '目的地', '关于我们', '常见问题'],
     inquire: '规划旅程', menu: '菜单', heroEyebrow: '一片等待探索的土地',
     heroTitle: '沙漠在召唤。\n故事由你书写。', heroLead: '从古老的商队路线，到穿越沙漠驶向大西洋的矿石列车，按照自己的节奏探索毛里塔尼亚。',
     discover: '探索旅程', custom: '定制私人旅程', proofTitle: '按你的方式旅行', proofText: '行程清晰，细节与你共同商定，是否预订由你决定。',
@@ -188,7 +188,7 @@ export const copy = {
   },
   ja: {
     ...baseCopy.en,
-    dir: 'ltr' as const, brand: 'モーリタニアを発見', nav: ['ホーム', '旅のプラン', '目的地', '私たちについて', 'よくある質問'],
+    dir: 'ltr' as const, brand: 'Trip in Mauritania', nav: ['ホーム', '旅のプラン', '目的地', '私たちについて', 'よくある質問'],
     inquire: '旅を計画する', menu: 'メニュー', heroEyebrow: '発見に満ちた国',
     heroTitle: '砂漠が呼んでいる。\n物語はあなたのもの。', heroLead: '古代の隊商路から、大西洋へ向かって砂漠を走る鉄鉱石列車まで。自分のペースでモーリタニアを旅しませんか。',
     discover: '旅を探す', custom: 'プライベート旅行を相談', proofTitle: 'あなたらしい旅を', proofText: '分かりやすい行程、相談できる詳細、予約の判断はあなたにお任せします。',
@@ -224,7 +224,7 @@ export const copy = {
   },
   de: {
     ...baseCopy.en,
-    dir: 'ltr' as const, brand: 'Mauritanien entdecken', nav: ['Startseite', 'Reisen', 'Ziele', 'Über uns', 'FAQ'],
+    dir: 'ltr' as const, brand: 'Trip in Mauritania', nav: ['Startseite', 'Reisen', 'Ziele', 'Über uns', 'FAQ'],
     inquire: 'Reise planen', menu: 'Menü', heroEyebrow: 'Ein Land voller Entdeckungen',
     heroTitle: 'Die Wüste ruft.\nDie Geschichte schreibst du.', heroLead: 'Von alten Karawanenwegen bis zum Eisenerzzug, der durch die Wüste zum Atlantik fährt: Entdecke Mauretanien in deinem Tempo.',
     discover: 'Reisen entdecken', custom: 'Privatreise planen', proofTitle: 'Deine Reise, dein Weg', proofText: 'Ein klarer Reiseplan, gemeinsam besprochene Details und die Entscheidung zu buchen liegt bei dir.',

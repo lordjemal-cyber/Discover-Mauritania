@@ -4,7 +4,7 @@ import { AdminDashboard } from '@/components/admin-dashboard'
 import { isSupabaseConfigured } from '@/lib/supabase/config'
 import { createClient } from '@/lib/supabase/server'
 
-export const metadata: Metadata = { title: 'لوحة الإدارة — اكتشف موريتانيا', robots: { index: false, follow: false } }
+export const metadata: Metadata = { title: 'لوحة الإدارة — Trip in Mauritania', robots: { index: false, follow: false } }
 
 export default async function AdminPage() {
   if (!isSupabaseConfigured()) return <AdminDashboard/>
